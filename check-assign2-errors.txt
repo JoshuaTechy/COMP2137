@@ -1,0 +1,9 @@
+Warning: The unit file, source configuration file or drop-ins of systemd-networkd-wait-online.service changed on disk. Run 'systemctl daemon-reload' to reload units.
+Warning: The unit file, source configuration file or drop-ins of netplan-ovs-cleanup.service changed on disk. Run 'systemctl daemon-reload' to reload units.
+Failed to connect to system bus: No such file or directory
+Falling back to a hard restart of systemd-networkd.service
+dpkg-preconfigure: unable to re-open stdin: No such file or directory
+useradd warning: remoteadmin's uid 0 outside of the UID_MIN 1000 and UID_MAX 60000 range.
+Warning: Permanently added 'server1-mgmt' (ED25519) to the list of known hosts.
+Error: Command not found
+Error: Command not found
