@@ -1,5 +1,102 @@
++ export PAGER=more
++ PAGER=more
++ checkscript=https://github.com/zonzorp/COMP2137/raw/main/check-assign2-script.sh
++ makecontainers=https://github.com/zonzorp/COMP2137/raw/main/makecontainers.sh
++ trap userimpatient SIGINT
++ echo ---Host/Student info----
+++ date
+++ hostnamectl
+++ egrep 'hostname|Machine|Operating'
+++ md5sum ./check-assign2-script.sh
+++ wget -q -O - https://github.com/zonzorp/COMP2137/raw/main/check-assign2-script.sh
+++ md5sum
++ echo '
+Running on Sat Jul 11 08:12:37 PM EDT 2026
+Run by joshua - () on host
+ Static hostname: Student
+      Machine ID: 04486fb40edf40d28203c426e22d1807
+Operating System: Ubuntu 24.04.4 LTS
+a98742121b14ebe6350c4bf8245d0062  ./check-assign2-script.sh - a98742121b14ebe6350c4bf8245d0062  -'
++ echo ------------------------
++ echo
++ echo ---Start of Assignment2.sh Check------
++ '[' '!' -f /home/joshua/makecontainers.sh ']'
++ '[' '!' -x /home/joshua/makecontainers.sh ']'
++ echo ---Running makecontainers.sh----------
++ /home/joshua/makecontainers.sh --count 1 --target server --fresh
+Warning: The unit file, source configuration file or drop-ins of systemd-networkd-wait-online.service changed on disk. Run 'systemctl daemon-reload' to reload units.
+Warning: The unit file, source configuration file or drop-ins of netplan-ovs-cleanup.service changed on disk. Run 'systemctl daemon-reload' to reload units.
+Failed to connect to system bus: No such file or directory
+Falling back to a hard restart of systemd-networkd.service
+Error: Failed to begin transaction: context deadline exceeded
 dpkg-preconfigure: unable to re-open stdin: No such file or directory
 useradd warning: remoteadmin's uid 0 outside of the UID_MIN 1000 and UID_MAX 60000 range.
++ sleep 30
++ ssh-keygen -f /home/joshua/.ssh/known_hosts -R server1-mgmt
++ echo ---Retrieving assignment2.sh script---
++ wget -q -O assignment2.sh https://github.com/joshuatechy/COMP2137/raw/main/assignment2.sh
++ echo 'Retrieved assignment2 script'
++ chmod +x assignment2.sh
++ scp -o StrictHostKeyChecking=off assignment2.sh remoteadmin@server1-mgmt:
 Warning: Permanently added 'server1-mgmt' (ED25519) to the list of known hosts.
++ echo 'Copied assignment2.sh script to server1'
++ echo ---assignment2.sh run----
++ ssh -o StrictHostKeyChecking=off remoteadmin@server1-mgmt /home/remoteadmin/assignment2.sh
++ echo -------------------------
++ echo
++ echo --network--------
++ incus exec server1 sh -- -c 'for f in /etc/hosts /etc/netplan/*; do printf "$f\n-----------------------\n"; cat $f; echo "-------------"; done'
++ echo ---applying netplan---
++ incus exec server1 sh -- -c 'netplan apply'
++ echo ---ip a---------------
++ incus exec server1 sh -- -c 'ip a'
++ echo --ip r----------------
++ incus exec server1 sh -- -c 'ip r'
++ echo ----------------------
++ echo
++ echo ---services status------
++ incus exec server1 -- sh -c 'systemctl status apache2 squid'
++ echo ------------------------
++ echo
++ echo ---ufw show added-------
++ incus exec server1 ufw show added
 Error: Command not found
++ echo ---ufw show status------
++ incus exec server1 ufw status
 Error: Command not found
++ echo ------------------------
++ echo
++ echo ---getents--------------------
++ incus exec server1 getent passwd aubrey captain snibbles brownie scooter sandy perrier cindy tiger yoda dennis
++ incus exec server1 getent group sudo
++ echo ---user home dir contents-----
++ incus exec server1 -- find /home -type f -ls
++ incus exec server1 sh -- -c 'for f in /home/*/.ssh/authorized_keys; do printf "$f\n-----------------------\n"; cat $f; echo "-------------"; done'
++ echo ------------------------------
++ echo
++ echo ---assignment2.sh rerun--------------------------------------------------------------------
++ ssh -o StrictHostKeyChecking=off remoteadmin@server1-mgmt /home/remoteadmin/assignment2.sh
++ echo -------------------------------------------------------------------------------------------
++ echo
++ echo --network--------
++ incus exec server1 sh -- -c 'for f in /etc/hosts /etc/netplan/*; do printf "$f\n-----------------------\n"; cat $f; echo "-------------"; done'
++ echo ---applying netplan---
++ incus exec server1 sh -- -c 'netplan apply'
++ echo ---ip a---------------
++ incus exec server1 sh -- -c 'ip a'
++ echo --ip r----------------
++ incus exec server1 sh -- -c 'ip r'
++ echo ----------------------
++ echo
++ echo ---services status------
++ incus exec server1 -- sh -c 'systemctl status apache2 squid'
++ echo ------------------------
++ echo
++ echo ---getents--------------------
++ incus exec server1 getent passwd aubrey captain snibbles brownie scooter sandy perrier cindy tiger yoda dennis
++ incus exec server1 getent group sudo
++ echo ---user home dir contents-----
++ incus exec server1 -- find /home -type f -ls
++ incus exec server1 sh -- -c 'for f in /home/*/.ssh/authorized_keys; do printf "$f\n-----------------------\n"; cat $f; echo "-------------"; done'
++ echo ------------------------------
++ echo
